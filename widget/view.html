@@ -1,0 +1,95 @@
+<!-- Copyright start
+  Copyright (C) 2008 - 2026 Fortinet Inc.
+  All rights reserved.
+  FORTINET CONFIDENTIAL & FORTINET PROPRIETARY SOURCE CODE
+  Copyright end -->
+<div class="threat-dashboard-container" data-ng-class="{'threat-map-light': currentTheme === 'light', 'threat-map-dark': currentTheme === 'dark', 'threat-map-steel': currentTheme === 'steel', 'threat-map-blue': currentTheme === 'deepSea'}">
+    <header class="threat-header">
+        <div class="threat-map-header-content">
+            <div class="threat-map-header-label">
+                <div class="outbreak-selector" data-ng-if="allOutbreakDetails.length > 0">
+                    <div class="cs-select">
+                        <select id="selectOutbreak" 
+                                name="selectOutbreak"
+                                data-ng-model="filter.selectedOutbreakID" 
+                                class="form-control"
+                                ng-options="outbreak.ID as outbreak.Name for outbreak in allOutbreakDetails" 
+                                data-ng-change="onOutbreakChange()">
+                        </select>
+                        <span class="fa fa-sort-desc"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="threat-map-header-action">
+                <div class="map-controls">
+                    <button type="button" class="btn btn-sm" ng-class="{'btn-primary': showHeat, 'btn-default': !showHeat}" ng-click="toggleHeat()">{{ 'threatMap.BTN_HEAT_MAP' | translate}}</button>
+                    <button type="button" class="btn btn-sm" ng-class="{'btn-primary': mode === '2d', 'btn-default': mode !== '2d'}" ng-click="setMode('2d')">2D</button>
+                    <button type="button" class="btn btn-sm" ng-class="{'btn-primary': mode === '3d', 'btn-default': mode !== '3d'}" ng-click="setMode('3d')">3D</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="map-viewport">
+        <div class="no-data-threat-map-overlay" data-ng-if="loadError" role="alert">
+            <div class="threat-map-scanning-container">
+                <div class="threat-map-scanning-text"><strong><i class="fa fa-exclamation-triangle warning-icon font-size-14 text-danger" aria-hidden="true"></i></strong>&nbsp;{{ 'threatMap.MSG_LOAD_FAILED' | translate}}</div>
+                <div class="threat-map-sub-text">{{loadError}}</div>
+            </div>
+        </div>
+        <div class="no-data-threat-map-overlay" data-ng-if="showProcessing && !loadError">
+            <div class="threat-map-scanning-container">
+                <div class="threat-map-scanning-circle"></div>
+                <div class="threat-map-scanning-text"><strong><i class="fa fa-exclamation-triangle warning-icon font-size-14 text-danger" aria-hidden="true"></i></strong>&nbsp;{{ 'threatMap.MSG_GLOBAL_THREAT_SCAN' | translate}}</div>
+                <div class="threat-map-sub-text" data-ng-if="showError">{{ 'threatMap.MSG_NO_ACTIVE_THREATS' | translate}}</div>
+            </div>
+        </div>
+        <threat-map  all-data="heatmapData" attack="latestAttack" mode="mode" heatmap="showHeat" widget-base-path="widgetBasePath"></threat-map>
+        <section class="map-legend">
+            <div class="legend-item"><span class="legend-icon dot-target"></span> {{ 'threatMap.LABEL_IPS_TARGET_CITY' | translate}}</div>
+            <div class="legend-item"><span class="legend-icon dot-source"></span> {{ 'threatMap.LABEL_IPS_SOURCE_CITY' | translate}}</div>
+            <div class="legend-item"><span class="legend-icon dot-malware"></span> {{ 'threatMap.LABEL_MALWARE' | translate}}</div>
+            <div class="legend-item"><span class="legend-icon heat-gradient"></span> {{ 'threatMap.LABEL_MOST_ATTACKS' | translate}}</div>
+        </section>
+    </main>
+
+    <section class="attack-log-container" data-ng-if="attackHistory && attackHistory.length > 0">
+        <div class="attack-list-header">
+            <div class="col-v">{{ 'threatMap.LABEL_VULNERABILITY' | translate}}</div>
+            <div class="col-st">{{ 'threatMap.LABEL_SOURCE_TARGET' | translate}}</div>
+            <div class="col-sev">{{ 'threatMap.LABEL_SEVERITY' | translate}}</div>
+            <div class="col-type">{{ 'threatMap.LABEL_TYPE' | translate}}</div>
+        </div>
+        
+        <div class="attack-rows-wrapper" data-ng-if="attackHistory.length > 0">
+            <div class="attack-row" ng-repeat="a in attackHistory track by $index">
+                <div class="col-v">
+                    <span class="ips-badge">IPS</span>
+                    <span class="v-text" title="{{a.name}}">{{a.name}}</span>
+                </div>
+
+                <div class="col-st">
+                    <div class="st-wrapper">
+                        <span class="flag-icon">{{a.src_flag}}</span>
+                        <span class="city-text">{{a.src_city}}</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flag-icon">{{a.dest_flag}}</span>
+                        <span class="city-text">{{a.dest_city}}</span>
+                    </div>
+                </div>
+
+                <div class="col-sev">
+                    <div class="sev-container">
+                        <i class="fa fa-warning sev-icon" ng-class="'icon-' + a.severity"></i>
+                        <span class="sev-label" ng-class="'text-' + a.severity">{{a.severity | uppercase}}</span>
+                    </div>
+                </div>
+
+                <div class="col-type" title="{{a.type}}">
+                    {{a.type}}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

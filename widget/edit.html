@@ -1,0 +1,43 @@
+<!-- Copyright start
+  Copyright (C) 2008 - 2026 Fortinet Inc.
+  All rights reserved.
+  FORTINET CONFIDENTIAL & FORTINET PROPRIETARY SOURCE CODE
+  Copyright end -->
+<form data-ng-submit="save()" class="noMargin" name="editWidgetForm" data-ng-class="{'state-wait': processing }"
+    novalidate>
+    <div class="modal-header">
+        <h3 class="modal-title col-md-9">{{ 'threatMap.HEADER_EDIT_THREAT_MAP' | translate}}</h3>
+        <button type="button" class="close" data-ng-click="cancel()" data-dismiss="modal" aria-label="Close"
+            id="close-edit-widget-form-btn">
+            <div aria-hidden="true" class="version-button">+</div>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div data-ng-if="!isConfigurable">
+            <span class="ng-binding">{{ 'threatMap.WIDGET_NOT_CONFIGURABLE' | translate}}</span>
+        </div>
+        <div data-ng-if="isConfigurable">
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="demoMode" name="demoMode"
+                            data-ng-model="config.demoMode">
+                        Demo mode (simulated attack arcs)
+                    </label>
+                </div>
+                <p class="help-block">Animates the map with simulated attack arcs for demos. Arcs are biased into the
+                    countries the heat layer highlights with real FortiGuard data. With this off, the widget uses the
+                    live FortiGuard attack feed only.</p>
+            </div>
+            <div class="form-group" data-ng-if="config.demoMode">
+                <label class="control-label" for="demoIntensity">Attacks per cycle</label>
+                <input type="number" class="form-control" id="demoIntensity" name="demoIntensity"
+                    data-ng-model="config.demoIntensity" min="10" max="200">
+                <p class="help-block">Number of simulated attacks queued per cycle (10&ndash;200; default 50).</p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button id="edit-widget-save" type="submit" class="btn btn-sm btn-primary"><i class="icon icon-check margin-right-sm"></i>{{'APP.BUTTON.OK' | translate}}</button>
+    </div>
+</form>

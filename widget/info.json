@@ -1,0 +1,23 @@
+{
+  "name": "fortiGuardThreatMap",
+  "title": "FortiGuard Threat Map (Enhanced)",
+  "subTitle": "Live attack activity with source-target mapping and severity insights",
+  "version": "1.0.2",
+  "published_date": 1771839678,
+  "releaseNotes": "unavailable",
+  "metadata": {
+    "description": "Displays real-time cyber attacks triggered by outbreak alerts, highlighting vulnerabilities, attack sources and targets, severity, and type.",
+    "pages": [
+      "Dashboard",
+      "Reports",
+      "Listing"
+    ],
+    "certified": "Yes",
+    "publisher": "Fortinet",
+    "compatibility": [
+      "8.0.0"
+    ],
+    "help_online": "https://github.com/fortinet-fortisoar/widget-fortiguard-threat-map/blob/release/1.0.0/README.md"
+  },
+  "development": true
+}

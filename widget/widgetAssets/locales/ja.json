@@ -1,0 +1,17 @@
+{
+    "threatMap": {
+        "BTN_HEAT_MAP": "ヒートマップ",
+        "HEADER_EDIT_THREAT_MAP": "脅威マップを編集",
+        "LABEL_IPS_SOURCE_CITY": "IPSソース都市",
+        "LABEL_IPS_TARGET_CITY": "IPSターゲット都市",
+        "LABEL_MALWARE": "マルウェア",
+        "LABEL_MOST_ATTACKS": "最も多い攻撃",
+        "LABEL_SEVERITY": "重大度",
+        "LABEL_SOURCE_TARGET": "ソースとターゲット",
+        "LABEL_TYPE": "タイプ",
+        "LABEL_VULNERABILITY": "脆弱性",
+        "MSG_GLOBAL_THREAT_SCAN": "グローバル脅威スキャン中...",
+        "MSG_NO_ACTIVE_THREATS": "選択したアウトブレイクに対してアクティブな脅威は検出されませんでした",
+        "WIDGET_NOT_CONFIGURABLE": "このウィジェットは設定できません"
+    }
+}

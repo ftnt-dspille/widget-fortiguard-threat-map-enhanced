@@ -1,0 +1,18 @@
+{
+    "threatMap": {
+        "BTN_HEAT_MAP": "Heat Map",
+        "HEADER_EDIT_THREAT_MAP": "Edit Threat Map",
+        "LABEL_IPS_SOURCE_CITY": "IPS Source City",
+        "LABEL_IPS_TARGET_CITY": "IPS Target City",
+        "LABEL_MALWARE": "Malware",
+        "LABEL_MOST_ATTACKS": "Most Attacks",
+        "LABEL_SEVERITY": "SEVERITY",
+        "LABEL_SOURCE_TARGET": "SOURCE & TARGET",
+        "LABEL_TYPE": "TYPE",
+        "LABEL_VULNERABILITY": "VULNERABILITY",
+        "MSG_LOAD_FAILED": "The threat map could not be loaded",
+        "MSG_GLOBAL_THREAT_SCAN": "GLOBAL THREAT SCAN...",
+        "MSG_NO_ACTIVE_THREATS": "NO ACTIVE THREATS DETECTED FOR SELECTED OUTBREAK",
+        "WIDGET_NOT_CONFIGURABLE": "This widget is not configurable"
+    }
+}

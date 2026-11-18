@@ -1,0 +1,547 @@
+/* Copyright start
+  Copyright (C) 2008 - 2026 Fortinet Inc.
+  All rights reserved.
+  FORTINET CONFIDENTIAL & FORTINET PROPRIETARY SOURCE CODE
+Copyright end */
+
+.threat-map-dark {
+    --bg-header: #0d1117;
+    --bg-body: #161616;         /* Deeper black for high-contrast glowing lines */
+    --border-color: #1c2a35;
+    --text-main: #ffffff;       /* Cyan tactical text */
+    --city-text-color: #FFDF00;
+    --land-fill: #161b22;       /* Subtle dark grey land */
+    --land-stroke: #30363d;
+    --attack-src: #BFB5FF;      /* Purple */
+    --attack-dest: #ff3b3b;     /* Red */
+    --heat-base: #0e3d22;       /* Dark Green */
+}
+
+.threat-map-light {
+    --bg-header: #f6f8fa;
+    --bg-body: #FFFFFF;         /* Subtle light grey-blue for the ocean/background */
+    --border-color: #d1d5da;
+    --text-main: #d73a49;       /* High-contrast text */
+    --city-text-color: #FF8D2A;
+    --land-fill: #ffffff;       /* Clean white landmasses */
+    --land-stroke: #adb5bd;     /* Slightly darker border for land definition */
+    --attack-src: #8e44ad;      
+    --attack-dest: #d73a49;     
+    --heat-base: #e9ecef;       
+}
+
+.threat-map-steel {
+    --bg-header: #1c2128;
+    --bg-body: rgba(255, 255, 255, 0.04);
+    --border-color: #444c56;
+    --text-main: #ffffff;
+    --city-text-color: #FFDF00;
+    --land-fill: #2d333b;       /* Muted blue-grey land */
+    --land-stroke: #444c56;
+    --attack-src: #ad8ee6;      /* Soft Purple */
+    --attack-dest: #f47067;     /* Soft Red */
+    --heat-base: #27ae60;
+}
+
+.threat-map-blue {
+    --bg-header: #00173d;       /* Deep Navy Header */
+    --bg-body: rgba(255, 255, 255, 0.04);         /* Midnight Blue Ocean */
+    --border-color: #101627;
+    --text-main: #ffffff;       /* Electric Blue Text */
+    --city-text-color: #FFDF00;
+    --land-fill: #002159;       /* Tactical Navy Land */
+    --land-stroke: #003b94;
+    --attack-src: #a29bfe;      /* Soft Lavender/Purple */
+    --attack-dest: #ff3b3b;     /* Bright Cyan for Hits */
+    --heat-base: #004e92;       /* Ocean Blue Heat Base */
+}
+
+/* Map specific adjustments for the Blue Theme */
+.threat-map-blue .country {
+    filter: drop-shadow(0 0 2px rgba(0, 168, 255, 0.1));
+}
+
+.threat-map-blue .ips-badge {
+    background: #0056b3;
+    border: 1px solid #00a8ff;
+}
+
+/* Use variables for SVG elements */
+.country {
+    transition: fill 0.3s ease;
+    stroke: var(--land-stroke);
+}
+
+/* Container that sits over the map-viewport */
+.no-data-threat-map-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none; /* Allows legend/buttons to remain clickable */
+    background: radial-gradient(circle, rgba(0, 229, 255, 0.03) 0%, transparent 70%);
+}
+
+.threat-map-scanning-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* The Pulsing Radar Ring */
+.threat-map-scanning-circle {
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--text-main);
+    border-radius: 50%;
+    position: relative;
+    animation: radar-pulse 2.5s infinite ease-out;
+}
+
+@keyframes radar-pulse {
+    0% { transform: scale(0.5); opacity: 0.8; }
+    100% { transform: scale(3); opacity: 0; }
+}
+
+.threat-map-scanning-text {
+    color: var(--text-main);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-top: 20px;
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+}
+
+.threat-map-sub-text {
+    color: var(--text-main);
+    font-size: 10px;
+    margin-top: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* --- Modern Pulsing Target Point --- */
+@keyframes sonarPulse {
+    0% {
+        /* Start with a large, faint ring immediately */
+        r: 12; 
+        stroke-opacity: 0.3; /* Faded start */
+        stroke-width: 1.5px;
+    }
+    50% {
+        /* Briefly brighten as it expands */
+        stroke-opacity: 0.6;
+        stroke-width: 2px;
+    }
+    100% {
+        /* Fade out at the edge */
+        r: 22; 
+        stroke-opacity: 0;
+        stroke-width: 0.5px;
+    }
+}
+
+.pulse-ring {
+    fill: none;
+    /* This connects the CSS animation to the SVG 'r' attribute */
+    animation: sonarPulse 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    pointer-events: none;
+}
+
+/* Ensure the SVG container itself is visible */
+.map-viewport svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* --- 2. LAYOUT & VIEWPORT --- */
+.threat-dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.threat-header {
+    background-color: var(--bg-body);
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 0;
+}
+
+.threat-map-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 5px;
+}
+
+.threat-map-header-action {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Space between the button group and the dropdown */
+}
+
+.threat-map-header-label {
+    color: var(--text-main);
+    font-weight: bold;
+    font-size: 11px;
+    letter-spacing: 1.2px;
+}
+
+/* Dropdown Container adjustments */
+.outbreak-selector {
+    width: 400px; /* Fixed width to prevent jumping when selection changes */
+    position: relative;
+}
+
+/* Ensure the select itself looks integrated */
+.outbreak-selector .form-control {
+    padding: 0 10px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+/* Fix for the font-awesome icon inside the dropdown */
+.outbreak-selector .fa-sort-desc {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    color: var(--text-main);
+    pointer-events: none;
+}
+
+.map-viewport {
+    width: 100%;
+    position: relative;
+    height: 600px;
+    background: var(--bg-body) !important;
+    overflow: visible;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Source Point (Purple) */
+.dot-source-map {
+    filter: drop-shadow(0 0 5px #9b59b6);
+}
+
+/* Target Point (Red/Orange) */
+.dot-target-map {
+    filter: drop-shadow(0 0 5px #ff3b3b);
+}
+
+.map-controls {
+    display: flex;
+    gap: 3px;
+}
+
+.map-btn {
+    background: var(--bg-header);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 5px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.map-legend {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: var(--bg-header);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px;
+    z-index: 100;
+    opacity: 0.9;
+    backdrop-filter: blur(4px);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text-main);
+    margin-bottom: 6px;
+}
+
+/* --- 4. INDICATORS & DOTS --- */
+.legend-icon {
+    width: 12px;
+    height: 12px;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.dot-target { border: 2px solid #ff3b3b; border-radius: 50%; box-shadow: 0 0 5px #ff3b3b; }
+.dot-source { background: #9b59b6; border-radius: 50%; box-shadow: 0 0 5px #9b59b6; }
+.dot-malware { border: 2px solid #f1c40f; border-radius: 50%; box-shadow: 0 0 5px #f1c40f; }
+/* 1. Default / Dark / Steel Theme (Teal Scale) */
+.threat-dashboard-container .heat-gradient {
+    background: linear-gradient(to right, #5FC7D5, #1C484D);
+}
+
+/* 2. Light Theme (Medium Blue Scale) */
+.threat-dashboard-container.threat-map-light .heat-gradient {
+    background: linear-gradient(to right, #86A6E2, #253D6A);
+}
+
+/* 3. Blue Theme (Light to Dark Blue Scale) */
+.threat-dashboard-container.threat-map-blue .heat-gradient {
+    background: linear-gradient(to right, #CFDEFB, #3E5C97);
+}
+.heat-gradient { 
+    width: 30px;
+    height: 12px;
+    border-radius: 2px;
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- 5. ATTACK LOG TABLE --- */
+.attack-log-container {
+    background-color: var(--bg-header);
+    border: 1px solid var(--border-color);
+    border-bottom: none;
+    width: 100%;
+}
+
+/* --- 5. ATTACK LOG TABLE (FIXED 6-ROW HEIGHT) --- */
+.attack-list-header {
+    display: flex;
+    width: 100%;
+    height: 40px;
+    background: var(--bg-header);
+    border-bottom: 2px solid var(--border-color);
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.attack-rows-wrapper {
+    /* Height matches exactly 6 rows (38px * 6) */
+    height: 228px; 
+    /* Hidden prevents the scrollbar from appearing if data overflows */
+    overflow: hidden; 
+    background-color: var(--bg-body);
+    position: relative;
+}
+
+.attack-row {
+    display: flex;
+    width: 100%;
+    font-size: 12px;
+    height: 38px; /* Maintain fixed height for visual consistency */
+    align-items: stretch;
+    border-bottom: 1px solid var(--border-color);
+    box-sizing: border-box;
+    /* This triggers whenever a NEW row is rendered in the DOM */
+    animation: slideInGlow 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    will-change: transform, opacity;
+}
+
+.attack-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* --- Updated Column Alignment Logic --- */
+/* --- COMPRESSED ATTACK LOG TABLE --- */
+.attack-list-header, .attack-row {
+    display: flex;
+    width: 100%;
+    align-items: stretch; /* Ensures vertical borders reach top to bottom */
+    padding: 0; 
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* --- REBALANCED COLUMN ALIGNMENT --- */
+.col-v, .col-st, .col-sev, .col-type {
+    padding: 4px 10px; 
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Set fixed widths as requested */
+.col-v    { flex: 0 0 35%; justify-content: flex-start; }
+.col-st   { flex: 0 0 20%; justify-content: center; gap: 4px; }
+.col-sev  { flex: 0 0 15%; justify-content: center; }
+/* The last column does not need a right border; the scrollbar area serves as the edge */
+.col-type { flex: 0 0 30%; border-right: none; justify-content: flex-start; }
+
+.col-sev { 
+    flex: 0 0 15%; 
+    justify-content: center; 
+}
+
+/* --- Centered Headers Specificity --- */
+.attack-list-header .col-v,
+.attack-list-header .col-st,
+.attack-list-header .col-sev,
+.attack-list-header .col-type {
+    justify-content: center;
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.02); /* Slight lift for header */
+}
+
+/* --- Row Hover Effect --- */
+.attack-row:hover {
+    background: rgba(0, 229, 255, 0.05);
+    transition: background 0.2s ease;
+}
+
+/* Initial state for new rows entering */
+.attack-row.ng-enter {
+    transition: all 0.5s ease-out;
+    opacity: 0;
+    transform: translateY(-10px);
+    background-color: rgba(0, 229, 255, 0.2); /* Brief highlight */
+}
+
+/* Final state for new rows */
+.attack-row.ng-enter.ng-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    background-color: transparent;
+}
+
+/* State for old rows being removed */
+.attack-row.ng-leave {
+    transition: all 0.4s ease-in;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Final state for removed rows */
+.attack-row.ng-leave.ng-leave-active {
+    opacity: 0;
+    transform: translateX(20px); /* Slides out slightly to the right */
+}
+
+/* Ensure rows don't "jump" during animation */
+.attack-row.ng-leave-active {
+    position: absolute;
+    width: 100%;
+}
+
+/* --- CSS-ONLY SMOOTH ROW ENTRY --- */
+@keyframes slideDownIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+        background-color: rgba(0, 229, 255, 0.15); /* Brief "new item" highlight */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        background-color: transparent;
+    }
+}
+
+/* --- FONT SIZE OVERHAUL --- */
+.attack-list-header > div {
+    font-size: 10px; /* Small, tactical header font */
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-main);
+    justify-content: center !important;
+}
+
+/* --- COMPRESSED THREAT LOG TABLE --- */
+.attack-list-header, .attack-row {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    padding: 0; 
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.attack-list-header > div {
+    justify-content: center !important; /* Forces headers to stay centered despite data alignment */
+    color: var(--text-main);
+    font-weight: 800;
+}
+
+.location {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; /* Prevents city names from squishing too much */
+}
+
+/* Font Fixes for Readability */
+.v-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.city-src, .city-dest { 
+    font-size: 10.5px; /* Compact font for locations */
+    font-weight: 600; 
+}
+
+.col-type {
+    line-height: 1.2;
+    opacity: 0.8;
+}
+
+.ips-badge {
+    font-size: 9px;
+    padding: 1px 4px;
+    margin-right: 5px;
+    flex-shrink: 0;
+}
+
+.sev-pill {
+    font-size: 9px;
+    padding: 2px 5px;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* --- Map Label Contrast --- */
+.city-label {
+    font-size: 12px !important; /* Larger text on the actual map */
+    font-weight: 900;
+}
+
+.flow-arrow {
+    margin: 0 4px;
+    font-size: 12px;
+}
+
+.virus-badge {
+    background: #ff9800 !important;
+}
+
+.sev-high { color: #ff3b3b; border: 1px solid #ff3b3b; background: rgba(255, 59, 59, 0.1); }
+.sev-medium { color: #ff9800; border: 1px solid #ff9800; background: rgba(255, 152, 0, 0.1); }
+.sev-low { color: #2ecc71; border: 1px solid #2ecc71; background: rgba(46, 204, 113, 0.1); }
+
+/* --- 6. CUSTOM SCROLLBAR --- */
+.attack-rows-wrapper::-webkit-scrollbar { display: none; }
+.attack-rows-wrapper::-webkit-scrollbar-track { background: var(--bg-body); }
+.attack-rows-wrapper::-webkit-scrollbar-thumb { 
+    background: var(--border-color); 
+    border-radius: 10px; 
+}
+.attack-rows-wrapper::-webkit-scrollbar-thumb:hover { 
+    background: var(--hover-glow); 
+}

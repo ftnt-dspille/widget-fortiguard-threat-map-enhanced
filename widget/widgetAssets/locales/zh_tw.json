@@ -1,0 +1,17 @@
+{
+    "threatMap": {
+        "BTN_HEAT_MAP": "熱力圖",
+        "HEADER_EDIT_THREAT_MAP": "編輯威脅地圖",
+        "LABEL_IPS_SOURCE_CITY": "IPS 來源城市",
+        "LABEL_IPS_TARGET_CITY": "IPS 目標城市",
+        "LABEL_MALWARE": "惡意軟體",
+        "LABEL_MOST_ATTACKS": "最多攻擊",
+        "LABEL_SEVERITY": "嚴重性",
+        "LABEL_SOURCE_TARGET": "來源與目標",
+        "LABEL_TYPE": "類型",
+        "LABEL_VULNERABILITY": "漏洞",
+        "MSG_GLOBAL_THREAT_SCAN": "正在進行全球威脅掃描...",
+        "MSG_NO_ACTIVE_THREATS": "所選事件未偵測到任何活躍威脅",
+        "WIDGET_NOT_CONFIGURABLE": "此小工具不可設定"
+    }
+}

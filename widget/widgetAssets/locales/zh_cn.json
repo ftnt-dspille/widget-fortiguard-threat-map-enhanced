@@ -1,0 +1,17 @@
+{
+    "threatMap": {
+        "BTN_HEAT_MAP": "热力图",
+        "HEADER_EDIT_THREAT_MAP": "编辑威胁地图",
+        "LABEL_IPS_SOURCE_CITY": "IPS 源城市",
+        "LABEL_IPS_TARGET_CITY": "IPS 目标城市",
+        "LABEL_MALWARE": "恶意软件",
+        "LABEL_MOST_ATTACKS": "最多攻击",
+        "LABEL_SEVERITY": "严重性",
+        "LABEL_SOURCE_TARGET": "来源和目标",
+        "LABEL_TYPE": "类型",
+        "LABEL_VULNERABILITY": "漏洞",
+        "MSG_GLOBAL_THREAT_SCAN": "正在进行全球威胁扫描...",
+        "MSG_NO_ACTIVE_THREATS": "所选事件未检测到任何活跃威胁",
+        "WIDGET_NOT_CONFIGURABLE": "此小组件不可配置"
+    }
+}

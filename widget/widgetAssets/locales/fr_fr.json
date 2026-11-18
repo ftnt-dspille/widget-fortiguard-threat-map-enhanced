@@ -1,0 +1,17 @@
+{
+    "threatMap": {
+        "BTN_HEAT_MAP": "Carte thermique",
+        "HEADER_EDIT_THREAT_MAP": "Modifier la carte des menaces",
+        "LABEL_IPS_SOURCE_CITY": "Ville source IPS",
+        "LABEL_IPS_TARGET_CITY": "Ville cible IPS",
+        "LABEL_MALWARE": "Logiciel malveillant",
+        "LABEL_MOST_ATTACKS": "Attaques les plus nombreuses",
+        "LABEL_SEVERITY": "Gravité",
+        "LABEL_SOURCE_TARGET": "Source et cible",
+        "LABEL_TYPE": "Type",
+        "LABEL_VULNERABILITY": "Vulnérabilité",
+        "MSG_GLOBAL_THREAT_SCAN": "Analyse globale des menaces en cours...",
+        "MSG_NO_ACTIVE_THREATS": "Aucune menace active détectée pour l’événement sélectionné",
+        "WIDGET_NOT_CONFIGURABLE": "Ce widget n’est pas configurable"
+    }
+}

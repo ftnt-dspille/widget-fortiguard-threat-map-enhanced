@@ -1,0 +1,17 @@
+{
+    "threatMap": {
+        "BTN_HEAT_MAP": "히트맵",
+        "HEADER_EDIT_THREAT_MAP": "위협 맵 편집",
+        "LABEL_IPS_SOURCE_CITY": "IPS 소스 도시",
+        "LABEL_IPS_TARGET_CITY": "IPS 대상 도시",
+        "LABEL_MALWARE": "멀웨어",
+        "LABEL_MOST_ATTACKS": "가장 많은 공격",
+        "LABEL_SEVERITY": "심각도",
+        "LABEL_SOURCE_TARGET": "소스 및 대상",
+        "LABEL_TYPE": "유형",
+        "LABEL_VULNERABILITY": "취약점",
+        "MSG_GLOBAL_THREAT_SCAN": "글로벌 위협 스캔 중...",
+        "MSG_NO_ACTIVE_THREATS": "선택한 발생에 대해 활성 위협이 감지되지 않았습니다",
+        "WIDGET_NOT_CONFIGURABLE": "이 위젯은 구성할 수 없습니다"
+    }
+}
